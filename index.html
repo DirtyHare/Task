@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Форма обратной связи</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h1>Обратная связь</h1>
+    <form id="feedbackForm">
+      <label for="name">Имя</label>
+      <input type="text" id="name" name="name" placeholder="Ваше имя" />
+
+      <label for="email">Email <span id="emailStar">*</span></label>
+<input type="email" id="email" name="email" placeholder="Ваш email" required />
+
+
+      <label>Категория обращения *</label>
+      <div class="category-buttons">
+        <button type="button" class="category-btn active" data-value="general">Вопрос</button>
+        <button type="button" class="category-btn" data-value="bug">Сообщение об ошибке</button>
+        <button type="button" class="category-btn" data-value="suggestion">Предложение</button>
+      </div>
+      <input type="hidden" id="category" name="category" value="general" />
+
+      <label for="message">Сообщение *</label>
+      <textarea id="message" name="message" placeholder="Ваше сообщение" required></textarea>
+
+      <div class="checkbox">
+        <input type="checkbox" id="consent" name="consent" required />
+        <label for="consent">Даю согласие на обработку персональных данных</label>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="submit-btn">Отправить</button>
+        <button type="reset" class="reset-btn">Очистить</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Модальное окно -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <p>Спасибо за ваше сообщение, вы помогаете нам становиться лучше!</p>
+      <button id="closeModal" class="submit-btn">Закрыть</button>
+    </div>
+  </div>
+
+  <script>
+  const categoryButtons = document.querySelectorAll('.category-btn');
+  const categoryInput = document.getElementById('category');
+  const emailInput = document.getElementById('email');
+  const emailStar = document.getElementById('emailStar');
+  const form = document.getElementById('feedbackForm');
+  const modal = document.getElementById('modal');
+  const closeModal = document.getElementById('closeModal');
+
+  // Логика выбора категории
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      categoryButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      categoryInput.value = button.dataset.value;
+
+      if (button.dataset.value === 'general') {
+        emailInput.required = true;
+        emailStar.style.display = 'inline';
+      } else {
+        emailInput.required = false;
+        emailStar.style.display = 'none';
+      }
+    });
+  });
+
+  // Отправка формы
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Здесь может быть отправка данных на сервер через fetch()
+
+    // Показываем модальное окно
+    modal.classList.remove('hidden');
+    form.reset();
+
+    // Сброс категории и обязательности email
+    categoryButtons.forEach(btn => btn.classList.remove('active'));
+    categoryButtons[0].classList.add('active');
+    categoryInput.value = 'general';
+    emailInput.required = true;
+    emailStar.style.display = 'inline';
+  });
+
+  // Закрытие модального окна
+  closeModal.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+</script>
+
+</body>
+</html>
